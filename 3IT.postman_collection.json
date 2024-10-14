@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "813c6802-474d-4b0b-8b7d-238cfbd267d4",
+		"name": "3IT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5448507"
+	},
+	"item": [
+		{
+			"name": "allMusicStyles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/musical-styles-survey/api/v1/allMusicStyles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"musical-styles-survey",
+						"api",
+						"v1",
+						"allMusicStyles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "voteResults",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/musical-styles-survey/api/v1/voteResults",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"musical-styles-survey",
+						"api",
+						"v1",
+						"voteResults"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUserPreference",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"styleId\": 3,\n    \"email\": \"andrea@proceso.cl\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/musical-styles-survey/api/v1/addUserPreference",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"musical-styles-survey",
+						"api",
+						"v1",
+						"addUserPreference"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
