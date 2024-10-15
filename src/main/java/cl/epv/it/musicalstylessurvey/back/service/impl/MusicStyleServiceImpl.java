@@ -39,6 +39,7 @@ public class MusicStyleServiceImpl implements MusicStyleService {
 
     @Override
     public AddUserResponse addUserMusicPreference(UserMusicPreferenceDTO userMusicPreferenceDTO) {
+        log.info("addUserMusicPreference");
         AtomicReference<UserMusicPreferenceDTO> dto = new AtomicReference<>();
         Optional.ofNullable(
                         UserMusicPreferenceMapper.INSTANCE.dtoToEntity(userMusicPreferenceDTO)
@@ -48,10 +49,7 @@ public class MusicStyleServiceImpl implements MusicStyleService {
                         }
                 );
 
-        AddUserResponse response = new AddUserResponse();
-        response.setStatusCode(0);
-        response.setMessage("Ingreso exitoso");
-        return response;
+        return dto.get() != null ? AddUserResponse.builder().statusCode(0).message("Ingreso exitoso").build() : AddUserResponse.builder().statusCode(-1).message("Problemas al insertar el estilo musical").build() ;
 
     }
 

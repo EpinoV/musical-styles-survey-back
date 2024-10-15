@@ -3,6 +3,7 @@ package cl.epv.it.musicalstylessurvey.back.dto;
 import lombok.*;
 
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddUserResponse {

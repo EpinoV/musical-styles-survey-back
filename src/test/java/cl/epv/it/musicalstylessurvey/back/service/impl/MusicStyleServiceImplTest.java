@@ -3,9 +3,14 @@ package cl.epv.it.musicalstylessurvey.back.service.impl;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import cl.epv.it.musicalstylessurvey.back.dto.AddUserResponse;
 import cl.epv.it.musicalstylessurvey.back.dto.MusicStyleDTO;
 import cl.epv.it.musicalstylessurvey.back.dto.MusicStyleSummaryDTO;
 import cl.epv.it.musicalstylessurvey.back.dto.UserMusicPreferenceDTO;
+import cl.epv.it.musicalstylessurvey.back.model.MusicStyle;
+import cl.epv.it.musicalstylessurvey.back.model.MusicStyleSummary;
+import cl.epv.it.musicalstylessurvey.back.model.UserMusicPreference;
+import cl.epv.it.musicalstylessurvey.back.model.UserMusicPreferenceId;
 import cl.epv.it.musicalstylessurvey.back.repository.MusicStyleRepository;
 import cl.epv.it.musicalstylessurvey.back.repository.UserMusicPreferenceRepository;
 import cl.epv.it.musicalstylessurvey.back.service.MusicStyleService;
@@ -13,13 +18,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 class MusicStyleServiceImplTest {
 
-    //@Mock
     private MusicStyleService musicStyleService;
 
     @Mock
@@ -28,30 +36,24 @@ class MusicStyleServiceImplTest {
     @Mock
     private UserMusicPreferenceRepository userMusicPreferenceRepository;
 
-    @InjectMocks
-    private MusicStyleServiceImpl musicStyleServiceImpl;
-
     @BeforeEach
     void setUp() {
-        //MockitoAnnotations.initMocks(this);
-        //musicStyleService = new MusicStyleServiceImpl(musicStyleRepository, userMusicPreferenceRepository);
+        MockitoAnnotations.openMocks(this);
+        musicStyleService = new MusicStyleServiceImpl(musicStyleRepository, userMusicPreferenceRepository);
     }
 
     @Test
     public void testGetAllMusicStyles() {
-        // Datos de prueba simulados
-        List<MusicStyleDTO> mockMusicStyles = Arrays.asList(
-                new MusicStyleDTO(1, "Rock"),
-                new MusicStyleDTO(2, "Pop")
+        // Datos de prueba
+        List<MusicStyle> mockMusicStyles = Arrays.asList(
+                new MusicStyle(1, "Rock"),
+                new MusicStyle(2, "Pop")
         );
 
-        // Configurar el comportamiento del mock
-        when(musicStyleService.getAllMusicStyles()).thenReturn(mockMusicStyles);
+        when(musicStyleRepository.findAll()).thenReturn(mockMusicStyles);
 
-        // Ejecutar el método a probar
-        List<MusicStyleDTO> result = musicStyleServiceImpl.getAllMusicStyles();
+        List<MusicStyleDTO> result = musicStyleService.getAllMusicStyles();
 
-        // Verificar los resultados
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("Rock", result.get(0).getName());
@@ -59,31 +61,27 @@ class MusicStyleServiceImplTest {
 
     @Test
     public void testAddUserMusicPreference() {
-        // Crear un DTO de preferencia de usuario
-        UserMusicPreferenceDTO preferenceDTO = new UserMusicPreferenceDTO("1", "user@example.com");
+        UserMusicPreference model = new UserMusicPreference( new UserMusicPreferenceId("user@example.com", 1L));
+        UserMusicPreferenceDTO dto = new UserMusicPreferenceDTO("1", "user@example.com");
 
-        // Ejecutar el método a probar
-        assertDoesNotThrow(() -> musicStyleServiceImpl.addUserMusicPreference(preferenceDTO));
+        when(userMusicPreferenceRepository.saveAndFlush(model)).thenReturn(model);
 
-        // Verificar que el método fue llamado una vez
-        verify(musicStyleService, times(1)).addUserMusicPreference(preferenceDTO);
+        AddUserResponse dtoResponse = musicStyleService.addUserMusicPreference(dto);
+
+        assertNotNull(dtoResponse);
     }
 
     @Test
     public void testGetAllMusicStyleSummary() {
-        // Datos simulados para la prueba
-        List<MusicStyleSummaryDTO> mockSummary = Arrays.asList(
-                MusicStyleSummaryDTO.builder().musicStyleName("Rock").summaryOfVotes(10).build(),
-                MusicStyleSummaryDTO.builder().musicStyleName("Pop").summaryOfVotes(20).build()
+        List<MusicStyleSummary> mockSummary = Arrays.asList(
+                MusicStyleSummary.builder().musicStyleName("Rock").summaryOfVotes(10L).build(),
+                MusicStyleSummary.builder().musicStyleName("Pop").summaryOfVotes(20L).build()
         );
 
-        // Configurar el comportamiento del mock
-        when(musicStyleService.getAllMusicStyleSummary()).thenReturn(mockSummary);
+        when(userMusicPreferenceRepository.findAllMusicStyleSummary()).thenReturn(mockSummary);
 
-        // Ejecutar el método a probar
-        List<MusicStyleSummaryDTO> result = musicStyleServiceImpl.getAllMusicStyleSummary();
+        List<MusicStyleSummaryDTO> result = musicStyleService.getAllMusicStyleSummary();
 
-        // Verificar los resultados
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(10, result.get(0).getSummaryOfVotes());

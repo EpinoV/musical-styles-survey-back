@@ -6,6 +6,8 @@ import lombok.*;
 
 @Embeddable
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserMusicPreferenceId {
     @Column(name = "EMAIL")
     private String email;
